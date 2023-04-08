@@ -1,6 +1,7 @@
 import express from "express";
 import React from "react";
 import ReactDomServer from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom/server';
 import App from './src/App.js';
 import fs from "fs";
 import path from "path";
@@ -9,12 +10,13 @@ const port = 3000;
 
 
 app.use('*', (req, res) => {
+  console.log('all')
    fs.readFile(path.resolve("./public/index.html"), "utf-8", (err, data) => {
     if(err){
         console.log(err);
         return res.status(500).send('Some error happned');
     }
-    const html = ReactDomServer.renderToString(<App />);
+    const html = ReactDomServer.renderToString(<StaticRouter ><App /> </StaticRouter>);
 
     return res.send(data.replace('<div id="root"></div>',`<div id="root">${html}</div>`))
    })
